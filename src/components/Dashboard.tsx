@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 type Account = {
   id: number;
@@ -12,6 +13,7 @@ type Account = {
 
 const Dashboard = () => {
   const [accounts, setAccounts] = useState<Account[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAccounts = async () => {
@@ -32,6 +34,7 @@ const Dashboard = () => {
   return (
     <div className="p-6 max-w-xl mx-auto text-center">
       <h2 className="text-2xl font-bold mb-4">Hesaplarım</h2>
+
       {accounts.length > 0 ? (
         <ul className="space-y-4">
           {accounts.map(account => (
@@ -46,6 +49,13 @@ const Dashboard = () => {
       ) : (
         <p>Hesap bulunamadı.</p>
       )}
+
+      <button
+        onClick={() => navigate("/participation-loan")}
+        className="bg-green-600 text-white px-4 py-2 mt-6 rounded hover:bg-green-700"
+      >
+        Katılım Kredisi Hesapla
+      </button>
     </div>
   );
 };
