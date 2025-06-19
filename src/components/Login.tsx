@@ -49,12 +49,12 @@ const Login = () => {
         Giriş Yap
       </button>
 
-      <p className="text-sm mt-4 text-center">
-        Hesabın yok mu?{" "}
-        <a href="/register" className="text-blue-600 underline">
-          Kayıt ol
+      <p>
+        Hesabınız yok mu?{" "}
+        <a href="/register" style={{ color: "blue", textDecoration: "underline" }}>
+            Kayıt Ol
         </a>
-      </p>
+        </p>
       <p className="text-sm mt-2 text-right">
         <a href="/forgot-password" className="text-blue-600 hover:underline">
             Şifreni mi unuttun?
