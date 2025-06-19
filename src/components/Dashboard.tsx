@@ -1,42 +1,50 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-type BalanceInfo = {
+type Account = {
+  id: number;
+  accountNumber: string;
   iban: string;
   balance: number;
+  accountType: string;
+  currency: string;
 };
 
 const Dashboard = () => {
-  const [balanceInfo, setBalanceInfo] = useState<BalanceInfo | null>(null);
+  const [accounts, setAccounts] = useState<Account[]>([]);
 
   useEffect(() => {
-    const fetchBalance = async () => {
+    const fetchAccounts = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:5252/api/account/15/balance", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        const response = await axios.get("http://localhost:5252/api/account/list", {
+          headers: { Authorization: `Bearer ${token}` }
         });
-        setBalanceInfo(response.data);
+        setAccounts(response.data);
       } catch (error) {
-        alert("Bakiye alınamadı.");
+        alert("Hesaplar alınamadı.");
       }
     };
 
-    fetchBalance();
+    fetchAccounts();
   }, []);
 
   return (
-    <div className="p-6 max-w-md mx-auto text-center">
-      <h2 className="text-2xl font-bold mb-4">Hesap Özeti</h2>
-      {balanceInfo ? (
-        <div className="space-y-2">
-          <p><strong>IBAN:</strong> {balanceInfo.iban}</p>
-          <p><strong>Bakiye:</strong> {balanceInfo.balance} ₺</p>
-        </div>
+    <div className="p-6 max-w-xl mx-auto text-center">
+      <h2 className="text-2xl font-bold mb-4">Hesaplarım</h2>
+      {accounts.length > 0 ? (
+        <ul className="space-y-4">
+          {accounts.map(account => (
+            <li key={account.id} className="border p-4 rounded">
+              <p><strong>IBAN:</strong> {account.iban}</p>
+              <p><strong>Hesap No:</strong> {account.accountNumber}</p>
+              <p><strong>Tür:</strong> {account.accountType}</p>
+              <p><strong>Bakiye:</strong> {account.balance} {account.currency}</p>
+            </li>
+          ))}
+        </ul>
       ) : (
-        <p>Yükleniyor...</p>
+        <p>Hesap bulunamadı.</p>
       )}
     </div>
   );

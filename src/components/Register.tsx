@@ -3,31 +3,33 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5252/api/user/register", {
-        email,
+      const response = await axios.post("http://localhost:5252/api/user/register", {
         username,
+        email,
         password,
       });
-      alert("Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz.");
-      navigate("/");
+
+      // Otomatik login işlemi
+      const loginRes = await axios.post("http://localhost:5252/api/user/login", {
+        email,
+        password,
+      });
+
+      const token = loginRes.data.token;
+      localStorage.setItem("token", token);
+
+      navigate("/dashboard");
     } catch (error: any) {
-        console.error("Kayıt hatası:", error); // ← önemli satır
-        const message =
-          error.response?.data?.message ||
-          JSON.stringify(error.response?.data) || // burada stringify ekledik!
-          error.message ||
-          "Bilinmeyen bir hata";
-        alert("Kayıt başarısız: " + message);
-      }
-      
+      alert("Kayıt başarısız: " + (error.response?.data || "Hata"));
+    }
   };
 
   return (
