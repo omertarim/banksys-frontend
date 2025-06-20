@@ -1,12 +1,12 @@
 import React from "react";
 import Login from "../components/Login";
 
-const LoginPage = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <Login />
-    </div>
-  );
+interface Props {
+  isAdminLogin?: boolean;
+}
+
+const LoginPage = ({ isAdminLogin = false }: Props) => {
+  return <Login isAdminLogin={isAdminLogin} />;
 };
 
 export default LoginPage;
