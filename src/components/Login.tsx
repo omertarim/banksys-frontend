@@ -2,22 +2,45 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+interface Props {
+  isAdminLogin?: boolean;
+}
+
+const Login = ({ isAdminLogin = false }: Props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
       const response = await axios.post("http://localhost:5252/api/user/login", {
         email,
-        password
+        password,
       });
 
       const token = response.data.token;
       localStorage.setItem("token", token);
-      navigate("/dashboard");
+
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      const role = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+      const isAdmin = role === "Admin";
+
+      if (isAdminLogin && !isAdmin) {
+        alert("Bu sayfaya sadece admin kullanıcılar giriş yapabilir.");
+        return;
+      }
+
+      if (!isAdminLogin && isAdmin) {
+        // Admin ama kullanıcı login sayfasındaysa yine giriş yapılabilir, yönlendirme yapılır
+        navigate("/admin");
+      } else if (isAdmin) {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
+
     } catch (error: any) {
       alert("Giriş başarısız: " + (error.response?.data || "Hata"));
     }
@@ -48,19 +71,17 @@ const Login = () => {
       >
         Giriş Yap
       </button>
-
       <p>
         Hesabınız yok mu?{" "}
         <a href="/register" style={{ color: "blue", textDecoration: "underline" }}>
-            Kayıt Ol
+          Kayıt Ol
         </a>
-        </p>
+      </p>
       <p className="text-sm mt-2 text-right">
         <a href="/forgot-password" className="text-blue-600 hover:underline">
-            Şifreni mi unuttun?
+          Şifreni mi unuttun?
         </a>
-        </p>
-
+      </p>
     </form>
   );
 };

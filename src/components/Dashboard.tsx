@@ -56,6 +56,13 @@ const Dashboard = () => {
       >
         Katılım Kredisi Hesapla
       </button>
+
+      <button
+        onClick={() => navigate("/loan-apply")}
+        className="bg-blue-600 text-white px-4 py-2 mt-2 rounded"
+        >
+        Kredi Başvurusu Yap
+        </button>
     </div>
   );
 };
