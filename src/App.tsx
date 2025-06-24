@@ -11,19 +11,18 @@ import ParticipationLoanPage from "./pages/ParticipationLoanPage";
 import LoanApplicationPage from './pages/LoanApplicationPage';
 import AdminLoanApprovalsPage from './pages/AdminLoanApprovalsPage';
 import ProtectedRoute from "./components/ProtectedRoute";
+import MyLoanApplicationsPage from "./pages/MyApplicationPage";
+import TransactionHistoryPage from "./pages/TransactionHistoryPage";
 
 function App() {
   return (
     <Routes>
-      {/* Giriş sayfaları */}
       <Route path="/" element={<Navigate to="/login" />} />
       <Route path="/login" element={<LoginPage />} />
-
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-      {/* Sadece giriş yapmış kullanıcılar */}
       <Route path="/dashboard" element={
         <ProtectedRoute>
           <DashboardPage />
@@ -49,8 +48,12 @@ function App() {
           <LoanApplicationPage />
         </ProtectedRoute>
       } />
+      <Route path="/my-loans" element={
+        <ProtectedRoute>
+          <MyLoanApplicationsPage />
+        </ProtectedRoute>
+      } />
 
-      {/* Sadece adminler */}
       <Route path="/admin" element={
         <ProtectedRoute requireAdmin={true}>
           <AdminPage />
@@ -62,7 +65,12 @@ function App() {
         </ProtectedRoute>
       } />
 
-      {/* Hatalı rota varsa login sayfasına */}
+      <Route path="/transactions/:accountId" element={
+        <ProtectedRoute>
+          <TransactionHistoryPage />
+        </ProtectedRoute>
+      } />
+
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   );

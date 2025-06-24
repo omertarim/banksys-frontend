@@ -43,6 +43,13 @@ const Dashboard = () => {
               <p><strong>Hesap No:</strong> {account.accountNumber}</p>
               <p><strong>Tür:</strong> {account.accountType}</p>
               <p><strong>Bakiye:</strong> {account.balance} {account.currency}</p>
+
+              <button
+                onClick={() => navigate(`/transactions/${account.id}`)}
+                className="mt-2 bg-gray-700 text-white px-4 py-1 rounded hover:bg-gray-800"
+              >
+                İşlem Geçmişi
+              </button>
             </li>
           ))}
         </ul>
@@ -60,9 +67,9 @@ const Dashboard = () => {
       <button
         onClick={() => navigate("/loan-apply")}
         className="bg-blue-600 text-white px-4 py-2 mt-2 rounded"
-        >
+      >
         Kredi Başvurusu Yap
-        </button>
+      </button>
     </div>
   );
 };
