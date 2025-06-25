@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import jsPDF from "jspdf";
+import "jspdf-autotable"; // oto tabloyu bu şekilde import ediyoruz
+
 
 type Account = {
   id: number;
@@ -30,6 +33,29 @@ const Dashboard = () => {
 
     fetchAccounts();
   }, []);
+
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+    doc.text("Hesaplarım", 14, 16);
+  
+    const tableColumn = ["Hesap No", "IBAN", "Tür", "Bakiye"];
+    const tableRows = accounts.map(acc => [
+      acc.accountNumber,
+      acc.iban,
+      acc.accountType,
+      `${acc.balance} ${acc.currency}`
+    ]);
+  
+    // @ts-ignore
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20
+    });
+  
+    doc.save("hesaplarim.pdf");
+  };
+  
 
   return (
     <div className="p-6 max-w-xl mx-auto text-center">
@@ -70,14 +96,21 @@ const Dashboard = () => {
       >
         Kredi Başvurusu Yap
       </button>
+
       <button
-      onClick={() => navigate("/create-account")}
-      className="bg-purple-600 text-white px-4 py-2 mt-2 rounded hover:bg-purple-700"
-    >
-      Yeni Hesap Oluştur
-    </button>
+        onClick={() => navigate("/create-account")}
+        className="bg-purple-600 text-white px-4 py-2 mt-2 rounded hover:bg-purple-700"
+      >
+        Yeni Hesap Oluştur
+      </button>
+
+      <button
+        onClick={downloadPDF}
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4"
+      >
+        Hesapları PDF Olarak İndir
+      </button>
     </div>
-    
   );
 };
 
