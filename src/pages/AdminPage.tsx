@@ -1,12 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
-interface User {
-  id: number;
-  username: string;
-  email: string;
-  isApproved: boolean;
-}
+import { Link } from "react-router-dom";
 
 interface LoanApplication {
   id: number;
@@ -24,25 +18,11 @@ const AdminPage = () => {
   const [iban, setIban] = useState("");
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
-
-  const [users, setUsers] = useState<User[]>([]);
   const [loanApplications, setLoanApplications] = useState<LoanApplication[]>([]);
-  const [showUsers, setShowUsers] = useState(false);
   const [showLoans, setShowLoans] = useState(false);
 
   const token = localStorage.getItem("token");
 
-  // Kullanıcıları çek
-  useEffect(() => {
-    axios
-      .get("http://localhost:5252/api/user/all", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => setUsers(res.data))
-      .catch((err) => console.error("Kullanıcılar alınamadı:", err));
-  }, []);
-
-  // Kredi başvurularını çek
   useEffect(() => {
     axios
       .get("http://localhost:5252/api/admin/loans/pending", {
@@ -65,25 +45,6 @@ const AdminPage = () => {
     } catch (error: any) {
       setMessage(error.response?.data || "❌ Hata oluştu.");
     }
-  };
-
-  const handleApproveUser = async (userId: number) => {
-    try {
-      await axios.post(`http://localhost:5252/api/user/approve/${userId}`, {}, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setUsers((prev) =>
-        prev.map((u) => (u.id === userId ? { ...u, isApproved: true } : u))
-      );
-      alert("✅ Kullanıcı onaylandı.");
-    } catch {
-      alert("❌ Onay işlemi başarısız.");
-    }
-  };
-
-  const handleRejectUser = (userId: number) => {
-    setUsers(users.filter((u) => u.id !== userId));
-    alert("⛔ Kullanıcı reddedildi.");
   };
 
   const handleLoanDecision = async (loanId: number, status: string) => {
@@ -115,24 +76,11 @@ const AdminPage = () => {
 
       <hr style={{ margin: "30px 0" }} />
 
-      <h2 onClick={() => setShowUsers(!showUsers)} style={{ cursor: "pointer" }}>
-        👥 Onay Bekleyen Kullanıcılar {showUsers ? "▲" : "▼"}
-      </h2>
-      {showUsers && (
-        <ul>
-          {users.filter(u => !u.isApproved).map(user => (
-            <li key={user.id} style={{ marginBottom: 10 }}>
-              👤 {user.username} ({user.email})
-              <button onClick={() => handleApproveUser(user.id)} style={{ marginLeft: 10 }}>
-                Onayla
-              </button>
-              <button onClick={() => handleRejectUser(user.id)} style={{ marginLeft: 5, color: "red" }}>
-                Reddet
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <Link to="/admin/user-approval">
+        <button style={{ padding: "10px 20px", backgroundColor: "#007bff", color: "#fff", borderRadius: "5px" }}>
+          👥 Kullanıcıları Yönet
+        </button>
+      </Link>
 
       <hr style={{ margin: "30px 0" }} />
 
