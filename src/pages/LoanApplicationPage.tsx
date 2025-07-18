@@ -4,13 +4,14 @@ import { useNavigate } from "react-router-dom";
 
 const LoanApplicationPage: React.FC = () => {
   const navigate = useNavigate();
-  const [loanType, setLoanType] = useState("");
   const [amount, setAmount] = useState(0);
   const [term, setTerm] = useState(0);
   const [accounts, setAccounts] = useState<{ id: number; iban: string }[]>([]);
   const [selectedAccountId, setSelectedAccountId] = useState<number | null>(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [countdown, setCountdown] = useState(0);
+  const [loanTypes, setLoanTypes] = useState<{ id: number; name: string }[]>([]);
+  const [selectedLoanTypeId, setSelectedLoanTypeId] = useState<number | null>(null);
 
   const token = localStorage.getItem("token");
 
@@ -27,6 +28,18 @@ const LoanApplicationPage: React.FC = () => {
       })
       .catch((err) => {
         console.error("Hesaplar alınamadı:", err);
+      });
+
+    // Kredi türlerini al
+    axios.get("http://localhost:5252/api/LoanApplicationType/active", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    
+      .then((res) => {
+        setLoanTypes(res.data);
+      })
+      .catch((err) => {
+        console.error("Kredi türleri alınamadı:", err);
       });
   }, []);
 
@@ -46,8 +59,8 @@ const LoanApplicationPage: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!selectedAccountId) {
-      alert("Lütfen bir hesap seçin.");
+    if (!selectedAccountId || !selectedLoanTypeId) {
+      alert("Lütfen kredi türü ve hesap seçin.");
       return;
     }
 
@@ -55,7 +68,7 @@ const LoanApplicationPage: React.FC = () => {
       .post(
         "http://localhost:5252/api/participation/apply",
         {
-          CreditType: loanType,
+          LoanApplicationTypeId: selectedLoanTypeId,
           Amount: amount,
           TermInMonths: term,
           TargetAccountId: selectedAccountId,
@@ -86,11 +99,17 @@ const LoanApplicationPage: React.FC = () => {
       <form onSubmit={handleSubmit}>
         <div>
           <label>Kredi Türü:</label>
-          <select value={loanType} onChange={(e) => setLoanType(e.target.value)} required>
+          <select
+            value={selectedLoanTypeId ?? ""}
+            onChange={(e) => setSelectedLoanTypeId(parseInt(e.target.value))}
+            required
+          >
             <option value="">Seçiniz</option>
-            <option value="İhtiyaç">İhtiyaç Kredisi</option>
-            <option value="Taşıt">Taşıt Kredisi</option>
-            <option value="Konut">Konut Kredisi</option>
+            {loanTypes.map((type) => (
+              <option key={type.id} value={type.id}>
+                {type.name}
+              </option>
+            ))}
           </select>
         </div>
 
