@@ -1,24 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const CustomerRegisterForm = () => {
+  const [personTypes, setPersonTypes] = useState<{ id: number; name: string }[]>([]);
+  const [taxOffices, setTaxOffices] = useState<{ id: number; name: string }[]>([]);
+  const [citizenships, setCitizenships] = useState<{ id: number; name: string }[]>([]);
+  const [accomodations, setAccomodations] = useState<{ id: number; name: string }[]>([]);
+  const [languages, setLanguages] = useState<{ id: number; name: string }[]>([]);
   const [form, setForm] = useState({
     email: "",
     password: "",
     name: "",
     taxNumber: "",
-    taxOffice: "",
-    personType: "",
-    citizenship: "",
-    accomodation: "",
-    language: "",
+    taxOfficeId: "",
+    personTypeId: "",
+    citizenshipId: "",
+    accomodationId: "",
+    languageId: "",
     recordingChannel: "Web",
     citizenshipCountryId: 0,
     accomodationCountryId: 0,
   });
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios.get("http://localhost:5252/api/customer/persontypes")
+      .then(res => setPersonTypes(res.data));
+    axios.get("http://localhost:5252/api/customer/taxoffices")
+      .then(res => setTaxOffices(res.data));
+    axios.get("http://localhost:5252/api/customer/citizenships")
+      .then(res => setCitizenships(res.data));
+    axios.get("http://localhost:5252/api/customer/accomodations")
+      .then(res => setAccomodations(res.data));
+    axios.get("http://localhost:5252/api/customer/languages")
+      .then(res => setLanguages(res.data));
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -32,14 +50,14 @@ const CustomerRegisterForm = () => {
 
     const requestBody = {
       email: form.email,
-      passwordHash: form.password, // şifre burada backend'in beklediği alan ismine dönüştürülüyor
+      passwordHash: form.password,
       name: form.name,
       taxNumber: form.taxNumber,
-      taxOffice: form.taxOffice,
-      personType: form.personType,
-      citizenship: form.citizenship,
-      accomodation: form.accomodation,
-      language: form.language,
+      taxOfficeId: form.taxOfficeId ? Number(form.taxOfficeId) : undefined,
+      personTypeId: form.personTypeId ? Number(form.personTypeId) : undefined,
+      citizenshipId: form.citizenshipId ? Number(form.citizenshipId) : undefined,
+      accomodationId: form.accomodationId ? Number(form.accomodationId) : undefined,
+      languageId: form.languageId ? Number(form.languageId) : undefined,
       recordingChannel: form.recordingChannel,
       citizenshipCountryId: form.citizenshipCountryId,
       accomodationCountryId: form.accomodationCountryId,
@@ -62,11 +80,42 @@ const CustomerRegisterForm = () => {
       <input name="password" type="password" placeholder="Şifre" value={form.password} onChange={handleChange} required className="w-full border p-2" />
       <input name="name" placeholder="Ad Soyad" value={form.name} onChange={handleChange} required className="w-full border p-2" />
       <input name="taxNumber" placeholder="Vergi Numarası" value={form.taxNumber} onChange={handleChange} required className="w-full border p-2" />
-      <input name="taxOffice" placeholder="Vergi Dairesi" value={form.taxOffice} onChange={handleChange} required className="w-full border p-2" />
-      <input name="personType" placeholder="Kişi Tipi (Bireysel / Kurumsal)" value={form.personType} onChange={handleChange} required className="w-full border p-2" />
-      <input name="citizenship" placeholder="Uyruk" value={form.citizenship} onChange={handleChange} required className="w-full border p-2" />
-      <input name="accomodation" placeholder="İkamet Adresi" value={form.accomodation} onChange={handleChange} required className="w-full border p-2" />
-      <input name="language" placeholder="Dil" value={form.language} onChange={handleChange} required className="w-full border p-2" />
+
+      <select name="taxOfficeId" value={form.taxOfficeId} onChange={handleChange} required className="w-full border p-2">
+        <option value="">Vergi Dairesi Seçiniz</option>
+        {taxOffices.map(office => (
+          <option key={office.id} value={office.id}>{office.name}</option>
+        ))}
+      </select>
+
+      <select name="personTypeId" value={form.personTypeId} onChange={handleChange} required className="w-full border p-2">
+        <option value="">Kişi Türü Seçiniz</option>
+        {personTypes.map(type => (
+          <option key={type.id} value={type.id}>{type.name}</option>
+        ))}
+      </select>
+
+      <select name="citizenshipId" value={form.citizenshipId} onChange={handleChange} required className="w-full border p-2">
+        <option value="">Uyruk Seçiniz</option>
+        {citizenships.map(type => (
+          <option key={type.id} value={type.id}>{type.name}</option>
+        ))}
+      </select>
+
+      <select name="accomodationId" value={form.accomodationId} onChange={handleChange} required className="w-full border p-2">
+        <option value="">İkamet Seçiniz</option>
+        {accomodations.map(acc => (
+          <option key={acc.id} value={acc.id}>{acc.name}</option>
+        ))}
+      </select>
+
+      <select name="languageId" value={form.languageId} onChange={handleChange} required className="w-full border p-2">
+        <option value="">Dil Seçiniz</option>
+        {languages.map(lang => (
+          <option key={lang.id} value={lang.id}>{lang.name}</option>
+        ))}
+      </select>
+
       <input name="citizenshipCountryId" type="number" placeholder="Uyruk Ülke ID" value={form.citizenshipCountryId} onChange={handleChange} required className="w-full border p-2" />
       <input name="accomodationCountryId" type="number" placeholder="İkamet Ülke ID" value={form.accomodationCountryId} onChange={handleChange} required className="w-full border p-2" />
 
