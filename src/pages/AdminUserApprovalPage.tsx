@@ -56,7 +56,7 @@ const AdminUserApprovalPage = () => {
           {users.map((user) => (
             <li key={user.id} className="bg-white shadow p-4 rounded flex justify-between items-center">
               <div>
-                <p><strong>Ad:</strong> {user.fullName}</p>
+                <p><strong>Ad:</strong> {user.name}</p>
                 <p><strong>Email:</strong> {user.email}</p>
               </div>
               <div className="space-x-2">
