@@ -7,11 +7,11 @@ interface CustomerUpdateRequest {
   name?: string;
   emails?: string[];
   taxNumber?: string;
-  taxOffice?: string;
-  personType?: string;
-  citizenship?: string;
-  accomodation?: string;
-  language?: string;
+  taxOfficeId?: string;
+  personTypeId?: string;
+  citizenshipId?: string;
+  accomodationId?: string;
+  languageId?: string;
   recordingChannel?: string;
   citizenshipCountryId?: string;
   accomodationCountryId?: string;
@@ -19,15 +19,20 @@ interface CustomerUpdateRequest {
 
 const UpdateCustomerInfoPage = () => {
   const navigate = useNavigate();
+  const [personTypes, setPersonTypes] = useState<{ id: number; name: string }[]>([]);
+  const [taxOffices, setTaxOffices] = useState<{ id: number; name: string }[]>([]);
+  const [citizenships, setCitizenships] = useState<{ id: number; name: string }[]>([]);
+  const [accomodations, setAccomodations] = useState<{ id: number; name: string }[]>([]);
+  const [languages, setLanguages] = useState<{ id: number; name: string }[]>([]);
   const [formData, setFormData] = useState<CustomerUpdateRequest>({
     name: "",
     emails: [],
     taxNumber: "",
-    taxOffice: "",
-    personType: "",
-    citizenship: "",
-    accomodation: "",
-    language: "",
+    taxOfficeId: "",
+    personTypeId: "",
+    citizenshipId: "",
+    accomodationId: "",
+    languageId: "",
     recordingChannel: "",
     citizenshipCountryId: "",
     accomodationCountryId: "",
@@ -35,6 +40,19 @@ const UpdateCustomerInfoPage = () => {
 
   const [newEmail, setNewEmail] = useState("");
   const [customerId, setCustomerId] = useState<number | null>(null);
+
+  useEffect(() => {
+    axios.get("http://localhost:5252/api/customer/persontypes")
+      .then(res => setPersonTypes(res.data));
+    axios.get("http://localhost:5252/api/customer/taxoffices")
+      .then(res => setTaxOffices(res.data));
+    axios.get("http://localhost:5252/api/customer/citizenships")
+      .then(res => setCitizenships(res.data));
+    axios.get("http://localhost:5252/api/customer/accomodations")
+      .then(res => setAccomodations(res.data));
+    axios.get("http://localhost:5252/api/customer/languages")
+      .then(res => setLanguages(res.data));
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -58,11 +76,11 @@ const UpdateCustomerInfoPage = () => {
             name: customerData.name,
             emails: customerData.emails || [],
             taxNumber: customerData.taxNumber,
-            taxOffice: customerData.taxOffice,
-            personType: customerData.personType,
-            citizenship: customerData.citizenship,
-            accomodation: customerData.accomodation,
-            language: customerData.language,
+            taxOfficeId: customerData.taxOfficeId?.toString() || "",
+            personTypeId: customerData.personTypeId?.toString() || "",
+            citizenshipId: customerData.citizenshipId?.toString() || "",
+            accomodationId: customerData.accomodationId?.toString() || "",
+            languageId: customerData.languageId?.toString() || "",
             recordingChannel: customerData.recordingChannel,
             citizenshipCountryId: customerData.citizenshipCountryId,
             accomodationCountryId: customerData.accomodationCountryId,
@@ -74,7 +92,7 @@ const UpdateCustomerInfoPage = () => {
     }
   }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -98,7 +116,14 @@ const UpdateCustomerInfoPage = () => {
     if (!customerId) return;
 
     axios
-      .put(`http://localhost:5252/api/customer/update/${customerId}`, formData)
+      .put(`http://localhost:5252/api/customer/update/${customerId}`, {
+        ...formData,
+        personTypeId: formData.personTypeId ? Number(formData.personTypeId) : undefined,
+        taxOfficeId: formData.taxOfficeId ? Number(formData.taxOfficeId) : undefined,
+        citizenshipId: formData.citizenshipId ? Number(formData.citizenshipId) : undefined,
+        accomodationId: formData.accomodationId ? Number(formData.accomodationId) : undefined,
+        languageId: formData.languageId ? Number(formData.languageId) : undefined,
+      })
       .then(() => {
         alert("Bilgiler başarıyla güncellendi.");
         navigate("/dashboard");
@@ -113,11 +138,42 @@ const UpdateCustomerInfoPage = () => {
       <div className="grid grid-cols-1 gap-2">
         <input name="name" placeholder="Ad Soyad" value={formData.name} onChange={handleInputChange} />
         <input name="taxNumber" placeholder="Vergi No" value={formData.taxNumber} onChange={handleInputChange} />
-        <input name="taxOffice" placeholder="Vergi Dairesi" value={formData.taxOffice} onChange={handleInputChange} />
-        <input name="personType" placeholder="Kişi Türü" value={formData.personType} onChange={handleInputChange} />
-        <input name="citizenship" placeholder="Uyruk" value={formData.citizenship} onChange={handleInputChange} />
-        <input name="accomodation" placeholder="İkamet" value={formData.accomodation} onChange={handleInputChange} />
-        <input name="language" placeholder="Dil" value={formData.language} onChange={handleInputChange} />
+
+        <select name="taxOfficeId" value={formData.taxOfficeId} onChange={handleInputChange} required>
+          <option value="">Vergi Dairesi Seçiniz</option>
+          {taxOffices.map(office => (
+            <option key={office.id} value={office.id}>{office.name}</option>
+          ))}
+        </select>
+
+        <select name="personTypeId" value={formData.personTypeId} onChange={handleInputChange} required>
+          <option value="">Kişi Türü Seçiniz</option>
+          {personTypes.map(type => (
+            <option key={type.id} value={type.id}>{type.name}</option>
+          ))}
+        </select>
+
+        <select name="citizenshipId" value={formData.citizenshipId} onChange={handleInputChange} required>
+          <option value="">Uyruk Seçiniz</option>
+          {citizenships.map(cit => (
+            <option key={cit.id} value={cit.id}>{cit.name}</option>
+          ))}
+        </select>
+
+        <select name="accomodationId" value={formData.accomodationId} onChange={handleInputChange} required>
+          <option value="">İkamet Seçiniz</option>
+          {accomodations.map(acc => (
+            <option key={acc.id} value={acc.id}>{acc.name}</option>
+          ))}
+        </select>
+
+        <select name="languageId" value={formData.languageId} onChange={handleInputChange} required>
+          <option value="">Dil Seçiniz</option>
+          {languages.map(lang => (
+            <option key={lang.id} value={lang.id}>{lang.name}</option>
+          ))}
+        </select>
+
         <input name="recordingChannel" placeholder="Kayıt Kanalı" value={formData.recordingChannel} onChange={handleInputChange} />
         <input name="citizenshipCountryId" placeholder="Uyruk Ülke ID" value={formData.citizenshipCountryId} onChange={handleInputChange} />
         <input name="accomodationCountryId" placeholder="İkamet Ülke ID" value={formData.accomodationCountryId} onChange={handleInputChange} />
