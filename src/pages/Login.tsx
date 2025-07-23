@@ -1,8 +1,5 @@
-// src/pages/LoginPage.tsx
 import React from "react";
 import HeroCarousel from "../components/HeroCarousel";
-
-// import ParticipationLoanCalculator from "../components/ParticipationLoanCalculator"; // KALDIRILDI
 import ExchangeRatesBox from "../components/ExchangeRatesBox";
 import ProfitShareCalculator from "../components/ProfitShareCalculator";
 
@@ -16,9 +13,6 @@ const LoginPage = () => {
     }}>
       <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start" }}>
         <HeroCarousel />
-        {/* <div style={{ marginTop: 32 }}>
-          <ParticipationLoanCalculator />
-        </div> */}
         <ProfitShareCalculator />
         <ExchangeRatesBox />
       </div>
@@ -30,4 +24,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default LoginPage; 
