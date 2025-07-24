@@ -28,40 +28,99 @@ const CreateAccount = () => {
   };
 
   return (
-    <div className="p-6 max-w-md mx-auto bg-white rounded-xl shadow-md space-y-6">
-      <h1 className="text-xl font-bold">Yeni Hesap Oluştur</h1>
-
-      <div>
-        <label className="block mb-1">Hesap Türü</label>
-        <select value={accountType} onChange={(e) => setAccountType(e.target.value)} className="w-full border px-3 py-2 rounded">
-          <option value="Cari">Cari</option>
-          <option value="Katılma">Katılma</option>
-          <option value="POS">POS</option>
-        </select>
-      </div>
-
-      <div>
-        <label className="block mb-1">Para Birimi</label>
-        <select value={currency} onChange={(e) => setCurrency(e.target.value)} className="w-full border px-3 py-2 rounded">
-          <option value="TL">TL</option>
-          {/* Gelecekte diğer para birimleri buraya eklenebilir */}
-        </select>
-      </div>
-
-      <button onClick={handleCreate} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-        Hesap Oluştur
-      </button>
-
-      {result && (
-        <div className="mt-4 p-4 border rounded bg-green-100">
-          <p><strong>IBAN:</strong> {result.iban}</p>
-          <p><strong>Hesap No:</strong> {result.accountNumber}</p>
+    <div style={{
+      minHeight: "100vh",
+      background: "#f7fbfd",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "flex-start",
+      paddingTop: 48
+    }}>
+      <div style={{
+        background: "#fff",
+        borderRadius: 32,
+        boxShadow: "0 8px 32px rgba(0,97,168,0.13)",
+        padding: "3.5rem 4.5rem 3rem 4.5rem",
+        maxWidth: 420,
+        width: "95vw",
+        margin: "0 auto"
+      }}>
+        <h1 style={{ color: "#009ee3", fontSize: "2rem", fontWeight: 700, marginBottom: 32, textAlign: "center", letterSpacing: 1 }}>Yeni Hesap Oluştur</h1>
+        <div style={{ marginBottom: 24 }}>
+          <label style={labelStyle}>Hesap Türü</label>
+          <select value={accountType} onChange={(e) => setAccountType(e.target.value)} style={inputStyle}>
+            <option value="Cari">Cari</option>
+            <option value="Katılma">Katılma</option>
+            <option value="POS">POS</option>
+          </select>
         </div>
-      )}
-
-      {error && <p className="text-red-500">{error}</p>}
+        <div style={{ marginBottom: 24 }}>
+          <label style={labelStyle}>Para Birimi</label>
+          <select value={currency} onChange={(e) => setCurrency(e.target.value)} style={inputStyle}>
+            <option value="TL">TL</option>
+            {/* Gelecekte diğer para birimleri buraya eklenebilir */}
+          </select>
+        </div>
+        <button onClick={handleCreate} style={buttonStyle}>
+          Hesap Oluştur
+        </button>
+        {result && (
+          <div style={{
+            marginTop: 28,
+            padding: "1.2rem 1.5rem",
+            borderRadius: 12,
+            background: "#e6f4fa",
+            color: "#009e3e",
+            fontWeight: 600,
+            fontSize: 18,
+            textAlign: "center",
+            boxShadow: "0 2px 12px rgba(0,97,168,0.08)"
+          }}>
+            <div><strong>IBAN:</strong> {result.iban}</div>
+            <div><strong>Hesap No:</strong> {result.accountNumber}</div>
+          </div>
+        )}
+        {error && <div style={{ color: "#ef4444", marginTop: 18, fontWeight: 600, textAlign: "center" }}>{error}</div>}
+      </div>
     </div>
   );
+};
+
+const inputStyle: React.CSSProperties = {
+  width: "100%",
+  padding: "1rem 1.2rem",
+  border: "2px solid #009ee3",
+  borderRadius: 10,
+  fontSize: 18,
+  fontWeight: 500,
+  background: "#f7fbfd",
+  color: "#003366",
+  outline: "none",
+  marginBottom: 0
+};
+
+const labelStyle: React.CSSProperties = {
+  fontWeight: 600,
+  color: "#003366",
+  fontSize: 18,
+  marginBottom: 6,
+  display: "block"
+};
+
+const buttonStyle: React.CSSProperties = {
+  background: "#009ee3",
+  color: "#fff",
+  border: "none",
+  borderRadius: 10,
+  padding: "1rem 0",
+  fontSize: 20,
+  fontWeight: 700,
+  marginTop: 8,
+  width: "100%",
+  cursor: "pointer",
+  boxShadow: "0 2px 12px rgba(0,97,168,0.08)",
+  transition: "background 0.2s"
 };
 
 export default CreateAccount;
