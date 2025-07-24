@@ -17,14 +17,7 @@ const DashboardPage = () => {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-8">
       <Dashboard ref={dashboardRef} />
       <TransferForm onTransferSuccess={refreshAccounts} />
-      <div className="mt-6">
-        <Link
-          to="/my-loans"
-          className="text-blue-600 hover:underline block mb-2"
-        >
-          Kredi Başvuru Geçmişim
-        </Link>
-      </div>
+      
     </div>
   );
 };

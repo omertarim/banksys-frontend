@@ -100,6 +100,11 @@ const LoginCustomer = () => {
         >
           Giriş Yap
         </button>
+        <div style={{ textAlign: "right", marginTop: 12 }}>
+          <a href="/forgot-password" style={{ color: "#009ee3", textDecoration: "underline", fontSize: 16, fontWeight: 500 }}>
+            Şifremi Unuttum?
+          </a>
+        </div>
       </form>
     </div>
   );

@@ -26,32 +26,95 @@ const LoginEmployee = () => {
   };
 
   return (
-    <form onSubmit={handleLogin} className="max-w-md mx-auto mt-10 space-y-4">
-      <h2 className="text-xl font-semibold text-center">Çalışan Girişi</h2>
-      <input
-        type="email"
-        placeholder="E-posta"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="w-full border p-2"
-        required
-      />
-      <input
-        type="password"
-        placeholder="Şifre"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="w-full border p-2"
-        required
-      />
-      <button
-        type="submit"
-        className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
-      >
-        Giriş Yap
-      </button>
-    </form>
+    <div style={{
+      minHeight: "100vh",
+      background: "#f7fbfd",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "flex-start",
+      paddingTop: 48
+    }}>
+      <form onSubmit={handleLogin} style={{
+        background: "#fff",
+        borderRadius: 32,
+        boxShadow: "0 8px 32px rgba(0,97,168,0.13)",
+        padding: "3.5rem 4.5rem 3rem 4.5rem",
+        maxWidth: 420,
+        width: "95vw",
+        margin: "0 auto",
+        display: "flex",
+        flexDirection: "column",
+        gap: 24
+      }}>
+        <h2 style={{ color: "#009ee3", fontSize: "2rem", fontWeight: 700, marginBottom: 18, textAlign: "center", letterSpacing: 1 }}>Çalışan Girişi</h2>
+        <div>
+          <label style={labelStyle}>E-posta</label>
+          <input
+            type="email"
+            placeholder="E-posta"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={inputStyle}
+            required
+          />
+        </div>
+        <div>
+          <label style={labelStyle}>Şifre</label>
+          <input
+            type="password"
+            placeholder="Şifre"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={inputStyle}
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          style={buttonStyleGreen}
+        >
+          Giriş Yap
+        </button>
+      </form>
+    </div>
   );
+};
+
+const inputStyle: React.CSSProperties = {
+  width: "100%",
+  padding: "1rem 1.2rem",
+  border: "2px solid #009ee3",
+  borderRadius: 10,
+  fontSize: 18,
+  fontWeight: 500,
+  background: "#f7fbfd",
+  color: "#003366",
+  outline: "none",
+  marginBottom: 0
+};
+
+const labelStyle: React.CSSProperties = {
+  fontWeight: 600,
+  color: "#003366",
+  fontSize: 16,
+  marginBottom: 6,
+  display: "block"
+};
+
+const buttonStyleGreen: React.CSSProperties = {
+  background: "#22c55e",
+  color: "#fff",
+  border: "none",
+  borderRadius: 10,
+  padding: "1rem 0",
+  fontSize: 20,
+  fontWeight: 700,
+  marginTop: 8,
+  width: "100%",
+  cursor: "pointer",
+  boxShadow: "0 2px 12px rgba(0,97,168,0.08)",
+  transition: "background 0.2s"
 };
 
 export default LoginEmployee;

@@ -6,6 +6,7 @@ const slides = [
     title: "BES başlatarak 8.000 TL bonus kazanmak mı? Birlikte yaparız!",
     desc: "Şimdi dijital kanallardan BES veya Çocuklara BES başlatın; 3.000 TL - 7.999 TL arası ödemelerde 3.000 TL bonus, 8.000 TL ve üzeri ödemelerde 8.000 TL bonus kazanın.",
     img: "/slide1.png",
+    adImage: "/ChatGPT Image 24 Tem 2025 17_49_09.png", // Add your ad image here
     primaryBtn: { text: "Detaylı Bilgi", onClick: () => {} },
     secondaryBtn: { text: "Müşterimiz Olun", onClick: () => {} },
   },
@@ -13,6 +14,7 @@ const slides = [
     title: "BankSys ile Kolay ve Güvenli Bankacılık",
     desc: "Tüm finansal işlemlerinizi hızlı, güvenli ve kolayca gerçekleştirin.",
     img: "/slide2.png",
+    adImage: "/ChatGPT Image 24 Tem 2025 18_00_53.png",
     primaryBtn: { text: "Hemen Başla", onClick: () => {} },
     secondaryBtn: { text: "Daha Fazla Bilgi", onClick: () => {} },
   },
@@ -20,6 +22,7 @@ const slides = [
     title: "Kredi ve Kart Avantajları Sizi Bekliyor!",
     desc: "BankSys ile avantajlı kredi ve kart fırsatlarını kaçırmayın.",
     img: "/slide3.png",
+    adImage: "/ChatGPT Image 24 Tem 2025 18_19_25.png",
     primaryBtn: { text: "Kredi Başvurusu", onClick: () => {} },
     secondaryBtn: { text: "Kart Başvurusu", onClick: () => {} },
   },
@@ -54,13 +57,28 @@ const HeroCarousel = () => {
             <button className="btn-outline">{slides[current].secondaryBtn.text}</button>
           </div>
         </div>
-        <div className="carousel-image">
-          {slides[current].img ? (
-            <img src={slides[current].img} alt="slide" onError={e => (e.currentTarget.style.display = 'none')} />
-          ) : (
-            <BankingSVG />
-          )}
-        </div>
+        <div className="carousel-image" style={{
+  flex: 3,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  height: 500, // veya 100% yükseklik
+}}>
+  <img
+    src={slides[current].adImage || "/ad-placeholder.png"}
+    alt="Reklam"
+    style={{
+      width: "100%",
+      height: "100%",
+      maxWidth: 700,
+      maxHeight: 500,
+      borderRadius: 100,
+      boxShadow: "0 12px 48px rgba(0,97,168,0.18)",
+      objectFit: "cover",
+      background: "#e6f4fa"
+    }}
+  />
+</div>
       </div>
       <div className="carousel-dots">
         {slides.map((_, idx) => (

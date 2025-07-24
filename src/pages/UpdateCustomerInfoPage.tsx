@@ -132,84 +132,152 @@ const UpdateCustomerInfoPage = () => {
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Müşteri Bilgilerini Güncelle</h2>
-
-      <div className="grid grid-cols-1 gap-2">
-        <input name="name" placeholder="Ad Soyad" value={formData.name} onChange={handleInputChange} />
-        <input name="taxNumber" placeholder="Vergi No" value={formData.taxNumber} onChange={handleInputChange} />
-
-        <select name="taxOfficeId" value={formData.taxOfficeId} onChange={handleInputChange} required>
-          <option value="">Vergi Dairesi Seçiniz</option>
-          {taxOffices.map(office => (
-            <option key={office.id} value={office.id}>{office.name}</option>
-          ))}
-        </select>
-
-        <select name="personTypeId" value={formData.personTypeId} onChange={handleInputChange} required>
-          <option value="">Kişi Türü Seçiniz</option>
-          {personTypes.map(type => (
-            <option key={type.id} value={type.id}>{type.name}</option>
-          ))}
-        </select>
-
-        <select name="citizenshipId" value={formData.citizenshipId} onChange={handleInputChange} required>
-          <option value="">Uyruk Seçiniz</option>
-          {citizenships.map(cit => (
-            <option key={cit.id} value={cit.id}>{cit.name}</option>
-          ))}
-        </select>
-
-        <select name="accomodationId" value={formData.accomodationId} onChange={handleInputChange} required>
-          <option value="">İkamet Seçiniz</option>
-          {accomodations.map(acc => (
-            <option key={acc.id} value={acc.id}>{acc.name}</option>
-          ))}
-        </select>
-
-        <select name="languageId" value={formData.languageId} onChange={handleInputChange} required>
-          <option value="">Dil Seçiniz</option>
-          {languages.map(lang => (
-            <option key={lang.id} value={lang.id}>{lang.name}</option>
-          ))}
-        </select>
-
-        <input name="recordingChannel" placeholder="Kayıt Kanalı" value={formData.recordingChannel} onChange={handleInputChange} />
-        <input name="citizenshipCountryId" placeholder="Uyruk Ülke ID" value={formData.citizenshipCountryId} onChange={handleInputChange} />
-        <input name="accomodationCountryId" placeholder="İkamet Ülke ID" value={formData.accomodationCountryId} onChange={handleInputChange} />
-      </div>
-
-      <div className="mt-4">
-        <label className="block font-semibold mb-1">Yeni e-posta ekle:</label>
-        <div className="flex gap-2">
-          <input
-            type="email"
-            placeholder="eposta@example.com"
-            value={newEmail}
-            onChange={(e) => setNewEmail(e.target.value)}
-          />
-          <button onClick={handleAddEmail} className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700">
-            Ekle
-          </button>
-        </div>
-      </div>
-
-      {formData.emails && formData.emails.length > 0 && (
-        <div className="mt-4">
-          <strong className="block mb-2">Mevcut E-posta Adresleri:</strong>
-          <ul className="list-disc list-inside">
-            {formData.emails.map((email, index) => (
-              <li key={index}>{email}</li>
+    <div style={{
+      minHeight: "100vh",
+      background: "#f7fbfd",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "flex-start",
+      paddingTop: 48
+    }}>
+      <div style={{
+        background: "#fff",
+        borderRadius: 32,
+        boxShadow: "0 8px 32px rgba(0,97,168,0.13)",
+        padding: "3.5rem 4.5rem 3rem 4.5rem",
+        maxWidth: 600,
+        width: "95vw",
+        margin: "0 auto"
+      }}>
+        <h2 style={{ color: "#009ee3", fontSize: "2rem", fontWeight: 700, marginBottom: 32, textAlign: "center", letterSpacing: 1 }}>Müşteri Bilgilerini Güncelle</h2>
+        <div style={{ display: "flex", flexDirection: "column", gap: 18, marginBottom: 24 }}>
+          <label style={labelStyle}>Ad Soyad</label>
+          <input name="name" placeholder="Ad Soyad" value={formData.name} onChange={handleInputChange} style={inputStyle} />
+          <label style={labelStyle}>Vergi No</label>
+          <input name="taxNumber" placeholder="Vergi No" value={formData.taxNumber} onChange={handleInputChange} style={inputStyle} />
+          <label style={labelStyle}>Vergi Dairesi</label>
+          <select name="taxOfficeId" value={formData.taxOfficeId} onChange={handleInputChange} required style={inputStyle}>
+            <option value="">Vergi Dairesi Seçiniz</option>
+            {taxOffices.map(office => (
+              <option key={office.id} value={office.id}>{office.name}</option>
             ))}
-          </ul>
+          </select>
+          <label style={labelStyle}>Kişi Türü</label>
+          <select name="personTypeId" value={formData.personTypeId} onChange={handleInputChange} required style={inputStyle}>
+            <option value="">Kişi Türü Seçiniz</option>
+            {personTypes.map(type => (
+              <option key={type.id} value={type.id}>{type.name}</option>
+            ))}
+          </select>
+          <label style={labelStyle}>Uyruk</label>
+          <select name="citizenshipId" value={formData.citizenshipId} onChange={handleInputChange} required style={inputStyle}>
+            <option value="">Uyruk Seçiniz</option>
+            {citizenships.map(cit => (
+              <option key={cit.id} value={cit.id}>{cit.name}</option>
+            ))}
+          </select>
+          <label style={labelStyle}>İkamet</label>
+          <select name="accomodationId" value={formData.accomodationId} onChange={handleInputChange} required style={inputStyle}>
+            <option value="">İkamet Seçiniz</option>
+            {accomodations.map(acc => (
+              <option key={acc.id} value={acc.id}>{acc.name}</option>
+            ))}
+          </select>
+          <label style={labelStyle}>Dil</label>
+          <select name="languageId" value={formData.languageId} onChange={handleInputChange} required style={inputStyle}>
+            <option value="">Dil Seçiniz</option>
+            {languages.map(lang => (
+              <option key={lang.id} value={lang.id}>{lang.name}</option>
+            ))}
+          </select>
+          <label style={labelStyle}>Kayıt Kanalı</label>
+          <input name="recordingChannel" placeholder="Kayıt Kanalı" value={formData.recordingChannel} onChange={handleInputChange} style={inputStyle} />
+          <label style={labelStyle}>Uyruk Ülke ID</label>
+          <input name="citizenshipCountryId" placeholder="Uyruk Ülke ID" value={formData.citizenshipCountryId} onChange={handleInputChange} style={inputStyle} />
+          <label style={labelStyle}>İkamet Ülke ID</label>
+          <input name="accomodationCountryId" placeholder="İkamet Ülke ID" value={formData.accomodationCountryId} onChange={handleInputChange} style={inputStyle} />
         </div>
-      )}
-
-      <button onClick={handleSubmit} className="mt-6 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-        Güncelle
-      </button>
+        <div style={{ marginBottom: 24 }}>
+          <label style={labelStyle}>Yeni e-posta ekle:</label>
+          <div style={{ display: "flex", gap: 12 }}>
+            <input
+              type="email"
+              placeholder="eposta@example.com"
+              value={newEmail}
+              onChange={(e) => setNewEmail(e.target.value)}
+              style={inputStyle}
+            />
+            <button onClick={handleAddEmail} style={buttonStyleGreen}>
+              Ekle
+            </button>
+          </div>
+        </div>
+        {formData.emails && formData.emails.length > 0 && (
+          <div style={{ marginBottom: 24 }}>
+            <strong style={{ display: "block", marginBottom: 8, color: "#003366" }}>Mevcut E-posta Adresleri:</strong>
+            <ul style={{ listStyle: "disc inside", color: "#009ee3", fontWeight: 600, fontSize: 16 }}>
+              {formData.emails.map((email, index) => (
+                <li key={index}>{email}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <button onClick={handleSubmit} style={buttonStyleBlue}>
+          Güncelle
+        </button>
+      </div>
     </div>
   );
+};
+
+const inputStyle: React.CSSProperties = {
+  width: "100%",
+  padding: "1rem 1.2rem",
+  border: "2px solid #009ee3",
+  borderRadius: 10,
+  fontSize: 18,
+  fontWeight: 500,
+  background: "#f7fbfd",
+  color: "#003366",
+  outline: "none",
+  marginBottom: 0
+};
+
+const labelStyle: React.CSSProperties = {
+  fontWeight: 600,
+  color: "#003366",
+  fontSize: 16,
+  marginBottom: 6,
+  display: "block"
+};
+
+const buttonStyleBlue: React.CSSProperties = {
+  background: "#009ee3",
+  color: "#fff",
+  border: "none",
+  borderRadius: 10,
+  padding: "1rem 0",
+  fontSize: 20,
+  fontWeight: 700,
+  marginTop: 8,
+  width: "100%",
+  cursor: "pointer",
+  boxShadow: "0 2px 12px rgba(0,97,168,0.08)",
+  transition: "background 0.2s"
+};
+
+const buttonStyleGreen: React.CSSProperties = {
+  background: "#22c55e",
+  color: "#fff",
+  border: "none",
+  borderRadius: 10,
+  padding: "1rem 1.5rem",
+  fontSize: 18,
+  fontWeight: 700,
+  cursor: "pointer",
+  boxShadow: "0 2px 8px #b3e0f7",
+  transition: "background 0.2s"
 };
 
 export default UpdateCustomerInfoPage;

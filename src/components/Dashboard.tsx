@@ -127,6 +127,10 @@ const Dashboard = forwardRef((props, ref) => {
           style={actionBtnStyleBlue}>
           Kredi Başvurusu Yap
         </button>
+        <button onClick={() => navigate("/my-loans")}
+          style={actionBtnStyleBlue}>
+          Kredi Başvuru Geçmişim
+        </button>
         <button onClick={() => navigate("/create-account")}
           style={actionBtnStylePurple}>
           Yeni Hesap Oluştur
